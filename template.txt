@@ -1,0 +1,59 @@
+
+<div><b>Goal for this quarter :</b></div>
+<div><b>Start a blog. Get famous. </b></div>
+
+<br/>
+<br/>
+
+<div><b>What are the goals for today? </b></div>
+<div style="padding-left: 15px">
+  <calendar-events></calendar-events>
+</div>
+<div><b>What was significant today? </b></div>
+<div style="padding-left: 15px">
+  <ol>
+    <li> <en-todo/>
+    </li>
+  </ol>
+</div>
+
+<br/>
+<br/>
+
+<div><b>What did I learn today? </b></div>
+
+<div style="padding-left: 15px">
+  <ol>
+    <li> <en-todo/>
+    </li>
+  </ol>
+</div>
+
+<br/>
+<br/>
+
+<div><b>What am I grateful for today? </b></div>
+
+<div style="padding-left: 15px">
+  <ol>
+    <li> <en-todo/>
+    </li>
+  </ol>
+</div>
+
+<br/>
+<br/>
+
+<div><b>What is the goal for tomorrow? </b></div>
+
+<div style="padding-left: 15px">
+  <ol>
+    <li> <en-todo/>
+    </li>
+  </ol>
+</div>
+
+<br/>
+<br/>
+
+<div><b>Random Thoughts</b></div>
