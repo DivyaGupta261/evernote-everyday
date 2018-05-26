@@ -3,7 +3,8 @@ var Evernote = require('evernote');
 var calendarEvents = [];
 
 var config = require('../config.json');
-var callbackUrl = "http://localhost:3000/oauth_callback";
+
+var callbackUrl = "http://localhost:5000/oauth_callback";
 
 // home page
 exports.index = function(req, res) {
