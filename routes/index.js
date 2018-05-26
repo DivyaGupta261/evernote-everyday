@@ -4,7 +4,8 @@ var calendarEvents = [];
 
 var config = require('../config.json');
 
-var callbackUrl = "http://localhost:5000/oauth_callback";
+// var callbackUrl = "http://localhost:5000/oauth_callback";
+var callbackUrl = "https://everyday-journal-evernote.herokuapp.com/oauth_callback"
 
 // home page
 exports.index = function(req, res) {
