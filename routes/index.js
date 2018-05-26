@@ -7,6 +7,8 @@ var callbackUrl = "http://localhost:3000/oauth_callback";
 
 // home page
 exports.index = function(req, res) {
+
+
   if (req.session.oauthAccessToken) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
@@ -165,8 +167,12 @@ exports.clear = function(req, res) {
 };
 
 exports.createNote = function(req, res) {
-  getTodayEvents();
+  getTodayEvents(req, res, createNoteCallback );
   console.log('createNote..method');
+}
+
+function createNoteCallback(req, res) {
+
   if (req.session.oauthAccessToken) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
@@ -177,6 +183,83 @@ exports.createNote = function(req, res) {
     client.getNoteStore().listNotebooks().then(function(notebooks) {
       req.session.notebooks = notebooks;
       // console.log(req.session)
+      let guid = notebooks[0].guid;
+      // console.log(guid);
+
+      let noteBody1 = `
+
+
+      <div><b>Goal for this quarter :</b></div>
+      <div><b>Start a blog. Get famous. </b></div>
+
+      <br/>
+      <br/>
+
+      <div><b>What are the goals for today? </b></div>
+      <div style="padding-left: 15px">`;
+
+        let noteBody2 = `
+      </div>
+      <div><b>What was significant today? </b></div>
+      <div style="padding-left: 15px">
+        <ol>
+          <li> <en-todo/>
+          </li>
+        </ol>
+      </div>
+
+      <br/>
+      <br/>
+      <div><b>What did I learn today? </b></div>
+
+      <div style="padding-left: 15px">
+        <ol>
+          <li> <en-todo/>
+          </li>
+        </ol>
+      </div>
+
+      <br/>
+      <br/>
+      <div><b>What am I grateful for today? </b></div>
+      <div style="padding-left: 15px">
+        <ol>
+          <li> <en-todo/>
+          </li>
+        </ol>
+      </div>
+
+      <br/>
+      <br/>
+      <div><b>What is the goal for tomorrow? </b></div>
+      <div style="padding-left: 15px">
+        <ol>
+          <li> <en-todo/>
+          </li>
+        </ol>
+      </div>
+
+      <br/>
+      <br/>
+      <div><b>Random Thoughts</b></div>
+
+      `;
+
+      let events = calendarEvents.reduce((e, event, index) => {
+        return `${e} <li> <en-todo/>${event}</li>`;
+      }, '<ol>') + `</ol>`;
+
+      let noteBody = `${noteBody1} ${events} ${noteBody2}`;
+
+      const date = new Date();
+
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+      let title = "Day "+ date.getDate() +" of " + monthNames[date.getMonth()] + ", " + date.getFullYear();
+      makeNote(client.getNoteStore(), title, noteBody, {guid} );
+
+      // req.session.notebooks = notebooks;
+      // console.log(req.session)
       res.render('index', {session: req.session});
     }, function(error) {
       req.session.error = JSON.stringify(error);
@@ -185,10 +268,6 @@ exports.createNote = function(req, res) {
   } else {
     res.render('index', {session: req.session});
   }
-}
-
-function createNoteCallback() {
-
 }
 
 function makeNote(noteStore, noteTitle, noteBody, parentNotebook) {
@@ -262,11 +341,11 @@ const {google} = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'credentials.json';
 
-function getTodayEvents() {
+function getTodayEvents(req, res, callback) {
   // Load client secrets from a local file.
   try {
     const content = fs.readFileSync('client_secret.json');
-    authorize(JSON.parse(content), listEvents);
+    authorize(JSON.parse(content), listEvents, req, res, createNoteCallback);
   } catch (err) {
     return console.log('Error loading client secret file:', err);
   }
@@ -279,7 +358,7 @@ function getTodayEvents() {
  * @param {function} callback The callback to call with the authorized client.
  * @return {function} if error in reading credentials.json asks for a new one.
  */
-function authorize(credentials, callback) {
+function authorize(credentials, callback, req, res, createNoteCallback) {
   const {client_secret, client_id, redirect_uris} = credentials.installed;
   let token = {};
   const oAuth2Client = new google.auth.OAuth2(
@@ -292,7 +371,7 @@ function authorize(credentials, callback) {
     return getAccessToken(oAuth2Client, callback);
   }
   oAuth2Client.setCredentials(JSON.parse(token));
-  callback(oAuth2Client);
+  callback(oAuth2Client, req, res, createNoteCallback);
 }
 
 /**
@@ -332,7 +411,7 @@ function getAccessToken(oAuth2Client, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth) {
+function listEvents(auth, req, res, createNoteCallback) {
   const calendar = google.calendar({version: 'v3', auth});
 
   let fromDate = new Date();
@@ -368,6 +447,7 @@ function listEvents(auth) {
         console.log(`${start} - ${event.summary} - ${hours} : ${minutes}`);
         return `${event.summary} - ${hours} : ${minutes}`;
       });
+      createNoteCallback(req, res);
     } else {
       console.log('No upcoming events found.');
     }
