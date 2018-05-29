@@ -1,6 +1,6 @@
 {
   "API_CONSUMER_KEY" : "divya261261",
   "API_CONSUMER_SECRET" : "76c1ee601116cc3c",
-  "SANDBOX" : false,
+  "SANDBOX" : true,
   "CHINA" : false
 }
