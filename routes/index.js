@@ -369,10 +369,18 @@ function authorize(credentials, callback, req, res, createNoteCallback) {
   // Check if we have previously stored a token.
   try {
     token = fs.readFileSync(TOKEN_PATH);
+    token = JSON.parse(token)
   } catch (err) {
-    return getAccessToken(oAuth2Client, callback);
+
+    token = {
+      "access_token": process.env.access_token,
+      "token_type": "Bearer",
+      "refresh_token": process.env.refresh_token,
+      "expiry_date": process.env.expiry_date
+    }
+    // return getAccessToken(oAuth2Client, callback);
   }
-  oAuth2Client.setCredentials(JSON.parse(token));
+  oAuth2Client.setCredentials(token);
   callback(oAuth2Client, req, res, createNoteCallback);
 }
 
