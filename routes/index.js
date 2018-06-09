@@ -223,7 +223,7 @@ function makeRequest() {
 }
 // "evernote": "^2.0.0-beta",
 function createNoteCallback(req, res) {
-let tokenHardCode = 'S=s317:U=89a2996:E=16b3d835c2d:C=163e5d22e78:P=81:A=divya261261:V=2:H=e87efdae36da55fab9d13a71662de7db';
+let tokenHardCode = process.env.evernote_access_token;
   if (tokenHardCode) {
     var token = tokenHardCode;
     var client = new Evernote.Client({
