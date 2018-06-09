@@ -221,11 +221,11 @@ function makeRequest() {
   req.end();
 
 }
-
+// "evernote": "^2.0.0-beta",
 function createNoteCallback(req, res) {
-let tokenHardCode = 'S=s317:U=89a2996:E=16b3d70e7c4:C=163e5bfb7e8:P=81:A=divya261261:V=2:H=c939c64721662be5ca10e9b32c4cee67';
-  if (req.session.oauthAccessToken || tokenHardCode) {
-    var token = req.session.oauthAccessToken ? req.session.oauthAccessToken : tokenHardCode;
+let tokenHardCode = 'S=s317:U=89a2996:E=16b3d835c2d:C=163e5d22e78:P=81:A=divya261261:V=2:H=e87efdae36da55fab9d13a71662de7db';
+  if (tokenHardCode) {
+    var token = tokenHardCode;
     var client = new Evernote.Client({
       token: token,
       // sandbox: config.SANDBOX,
@@ -429,6 +429,7 @@ function authorize(credentials, callback, req, res, createNoteCallback) {
       "refresh_token": process.env.refresh_token,
       "expiry_date": process.env.expiry_date
     }
+
     // return getAccessToken(oAuth2Client, callback);
   }
   oAuth2Client.setCredentials(token);
@@ -511,6 +512,7 @@ function listEvents(auth, req, res, createNoteCallback) {
       createNoteCallback(req, res);
     } else {
       console.log('No upcoming events found.');
+      createNoteCallback(req, res);
     }
   });
 }
