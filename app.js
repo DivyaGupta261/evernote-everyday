@@ -23,6 +23,8 @@ app.get('/oauth', routes.oauth);
 app.get('/oauth_callback', routes.oauth_callback);
 app.get('/clear', routes.clear);
 app.get('/createNote', routes.createNote);
+app.get('/buttonCreate', routes.buttonCreate);
+
 
 let port = process.env.PORT || 5000
 // Run

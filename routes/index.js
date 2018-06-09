@@ -181,6 +181,47 @@ exports.createNote = function(req, res) {
   console.log('createNote..method');
 }
 
+exports.buttonCreate = function(req, res) {
+  makeRequest();
+}
+
+function makeRequest() {
+  var http = require("https");
+
+  var options = {
+    "method": "GET",
+    "hostname": "everyday-journal-evernote.herokuapp.com",
+    "port": null,
+    "path": "/createNote",
+    "headers": {
+      "upgrade-insecure-requests": "1",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36",
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+      "accept-encoding": "gzip, deflate, br",
+      "accept-language": "en-US,en;q=0.9",
+      "cookie": "connect.sid=s%3AwB8Z51lp20CptfL92OO3ZvEMcgm00-W2.jNoL7CCX50SOZ7TiRC1JKxrQne5ito18ntJXZ%2BdVPE4",
+      "cache-control": "no-cache",
+      "postman-token": "8015893f-052b-0f50-7f73-8c736de69b00"
+    }
+  };
+
+  var req = http.request(options, function (res) {
+    var chunks = [];
+
+    res.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    res.on("end", function () {
+      var body = Buffer.concat(chunks);
+      console.log(body.toString());
+    });
+  });
+
+  req.end();
+
+}
+
 function createNoteCallback(req, res) {
 
   if (req.session.oauthAccessToken) {
