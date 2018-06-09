@@ -10,8 +10,10 @@ var callbackUrl = "https://everyday-journal-evernote.herokuapp.com/oauth_callbac
 // home page
 exports.index = function(req, res) {
 
-
+console.log('index');
   if (req.session.oauthAccessToken) {
+    console.log('index request..', req.session.oauthAccessToken);
+
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
@@ -99,10 +101,12 @@ exports.index = function(req, res) {
       res.render('index', {session: req.session});
 
     }, function(error) {
+      console.log('index request error callback..');
       req.session.error = JSON.stringify(error);
       res.render('index', {session: req.session});
     });
   } else {
+    console.log('index request else..', req.session.oauthAccessToken);
     res.render('index', {session: req.session});
   }
 };
@@ -296,7 +300,7 @@ function makeNote(noteStore, noteTitle, noteBody, parentNotebook) {
   noteStore.createNote(ourNote)
     .then(function(note) {
       // Do something with `note`
-      console.log(note);
+      console.log(' create note');
     }).catch(function (err) {
       // Something was wrong with the note data
       // See EDAMErrorCode enumeration for error code explanation
