@@ -223,9 +223,9 @@ function makeRequest() {
 }
 
 function createNoteCallback(req, res) {
-let token = 'S=s317:U=89a2996:E=16b3d70e7c4:C=163e5bfb7e8:P=81:A=divya261261:V=2:H=c939c64721662be5ca10e9b32c4cee67';
-  if (req.session.oauthAccessToken || token) {
-    var token = req.session.oauthAccessToken ? req.session.oauthAccessToken : token;
+let tokenHardCode = 'S=s317:U=89a2996:E=16b3d70e7c4:C=163e5bfb7e8:P=81:A=divya261261:V=2:H=c939c64721662be5ca10e9b32c4cee67';
+  if (req.session.oauthAccessToken || tokenHardCode) {
+    var token = req.session.oauthAccessToken ? req.session.oauthAccessToken : tokenHardCode;
     var client = new Evernote.Client({
       token: token,
       // sandbox: config.SANDBOX,
