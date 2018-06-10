@@ -1,4 +1,6 @@
 var Evernote = require('evernote');
+var moment = require('moment');
+const momentTimezone = require('moment-timezone');
 
 var calendarEvents = [];
 
@@ -494,21 +496,29 @@ function listEvents(auth, req, res, createNoteCallback) {
     const events = data.items;
     if (events.length) {
       console.log('Events for the day:');
-      calendarEvents = events.map((event, i) => {
-        let  start = event.start.dateTime || event.start.date;
-        start = new Date(start);
+      try {
+        calendarEvents = events.map((event, i) => {
+          let  start = event.start.dateTime || event.start.date;
+          start = new Date(start);
 
-         start.getHours().toString().length
+           start.getHours().toString().length
 
-        let hours = start.getHours();
-        let minutes = start.getMinutes();
+          let hours = start.getHours();
+          let minutes = start.getMinutes();
 
-        hours = hours.toString().length > 1 ? hours : '0' + hours;
-        minutes = minutes.toString().length > 1 ? minutes : '0' + minutes;
+          let startTime = moment(start).tz('Asia/Colombo').format('LT');
 
-        console.log(`${start} - ${event.summary} - ${hours} : ${minutes}`);
-        return `${event.summary} - ${hours} : ${minutes}`;
-      });
+          hours = hours.toString().length > 1 ? hours : '0' + hours;
+          minutes = minutes.toString().length > 1 ? minutes : '0' + minutes;
+
+          console.log(`${startTime} - ${event.summary} - ${hours} : ${minutes}`);
+          return `${event.summary} - ${startTime}`;
+        });
+
+      } catch (e) {
+        console.log(e);
+      }
+
       createNoteCallback(req, res);
     } else {
       console.log('No upcoming events found.');
